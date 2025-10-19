@@ -23,6 +23,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--log-level", default=None, help="Override log level")
     parser.add_argument("--duration", type=int, default=10, help="Trading duration in minutes")
     parser.add_argument("--interval", type=int, default=60, help="Check interval in seconds")
+    parser.add_argument("--no-sentiment", action="store_true", help="Disable sentiment analysis")
+    parser.add_argument("--use-gpt", action="store_true", help="Enable GPT for ambiguous signals (costs credits)")
+    parser.add_argument("--risk-percent", type=float, default=None, help="Override risk percent per trade")
+    parser.add_argument("--max-exposure", type=float, default=None, help="Override max exposure percentage")
     return parser.parse_args()
 
 
@@ -43,18 +47,31 @@ def main() -> None:
     system_logger = loggers["system"]
     
     mode = "DRY-RUN" if config.dry_run else "LIVE"
+    use_sentiment = not args.no_sentiment
+    use_gpt = args.use_gpt
+    
     system_logger.info("=" * 60)
     system_logger.info("Starting Trading Bot MVP")
     system_logger.info("Environment: %s | Mode: %s", config.environment.value.upper(), mode)
     system_logger.info("Symbol: %s | Duration: %d minutes", args.symbol, args.duration)
+    system_logger.info("Sentiment Analysis: %s | GPT: %s", "Enabled" if use_sentiment else "Disabled", "Yes" if use_gpt else "No")
     system_logger.info("=" * 60)
 
     state_manager = StateManager(Path(config.state_file), Path(config.trades_history_file))
-    strategy = Strategy(min_volume=0, rsi_bounds=(30, 70), aggressive=True)
+    strategy = Strategy(
+        min_volume=0,
+        rsi_bounds=(35, 65),
+        adx_trend_threshold=20,
+        atr_volatility_ceiling=0.02,
+    )
+    max_exposure = args.max_exposure if args.max_exposure is not None else config.risk.max_exposure_pct
     risk_manager = RiskManager(
         max_daily_loss_pct=config.risk.daily_loss_limit_pct,
-        max_exposure_pct=config.risk.max_exposure_pct,
+        max_exposure_pct=max_exposure,
     )
+
+    if args.risk_percent is not None:
+        config.strategy.risk_percent = args.risk_percent
     
     binance_client = BinanceClientWrapper(config, loggers["api_calls"])
     
@@ -65,6 +82,8 @@ def main() -> None:
         risk_manager=risk_manager,
         state_manager=state_manager,
         loggers=loggers,
+        use_sentiment_analysis=use_sentiment,
+        use_gpt=use_gpt,
     )
     
     trading_engine.run(symbol=args.symbol, duration_minutes=args.duration, interval_seconds=args.interval)

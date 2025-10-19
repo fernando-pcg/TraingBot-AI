@@ -1,0 +1,41 @@
+{
+  "environment": "testnet",
+  "dry_run": true,
+  "log_level": "INFO",
+  "state_file": "state/state.json",
+  "trades_history_file": "state/trades.json",
+  "logs_dir": "logs",
+  "binance": {
+    "api_key": null,
+    "api_secret": null,
+    "use_testnet": true
+  },
+  "risk": {
+    "initial_capital": 100.0,
+    "max_capital_per_trade": 60.0,
+    "stop_loss_pct": 0.015,
+    "take_profit_pct": 0.025,
+    "min_profit_margin_pct": 0.005,
+    "max_profit_margin_pct": 0.5,
+    "reinvestment_pct": 0.5,
+    "daily_loss_limit_pct": 0.10,
+    "max_exposure_pct": 0.6
+  },
+  "strategy": {
+    "name": "ultra_aggressive_momentum",
+    "risk_percent": 0.02,
+    "stop_loss_pct": 0.012,
+    "take_profit_pct": 0.018,
+    "indicators": {
+      "rsi_period": 14,
+      "rsi_lower": 25,
+      "rsi_upper": 75,
+      "macd_fast": 12,
+      "macd_slow": 26,
+      "macd_signal": 9,
+      "adx_period": 14,
+      "adx_threshold": 12
+    }
+  }
+}
+

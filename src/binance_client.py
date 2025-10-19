@@ -41,6 +41,7 @@ class BinanceClientWrapper:
             config.binance.api_secret,
             tld="com",
             testnet=config.binance.use_testnet,
+            requests_params={"timeout": 10},
         )
 
         if config.binance.use_testnet or (config.environment and config.environment.value == "testnet"):

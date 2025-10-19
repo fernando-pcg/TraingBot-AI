@@ -16,7 +16,13 @@ class DataPipeline:
     def __init__(self, client: BinanceClientWrapper) -> None:
         self._client = client
 
-    def get_recent_candles(self, symbol: str, interval: str = "1m", limit: int = 100) -> pd.DataFrame:
+    def get_recent_candles(
+        self,
+        symbol: str,
+        interval: str = "1m",
+        limit: int = 100,
+        include_indicators: bool = False,
+    ) -> pd.DataFrame:
         """Fetch recent candlestick data and return as DataFrame."""
         
         klines = self._client.get_klines(symbol=symbol, interval=interval, limit=limit)
@@ -45,7 +51,13 @@ class DataPipeline:
         for col in ["open", "high", "low", "close", "volume"]:
             df[col] = df[col].astype(float)
         
-        return df[["timestamp", "open", "high", "low", "close", "volume"]]
+        df = df[["timestamp", "open", "high", "low", "close", "volume"]]
+
+        if include_indicators:
+            df.set_index("timestamp", inplace=True)
+            df.sort_index(inplace=True)
+        
+        return df
 
     def get_current_price(self, symbol: str) -> float:
         """Get current market price for a symbol."""

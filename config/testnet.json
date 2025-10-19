@@ -2,22 +2,22 @@
   "environment": "testnet",
   "risk": {
     "initial_capital": 1000,
-    "max_capital_per_trade": 200,
-    "stop_loss_pct": 0.01,
-    "take_profit_pct": 0.02,
-    "min_profit_margin_pct": 0.01,
-    "max_profit_margin_pct": 0.2,
-    "reinvestment_pct": 0.5,
+    "max_capital_per_trade": 100,
+    "stop_loss_pct": 0.003,
+    "take_profit_pct": 0.006,
+    "min_profit_margin_pct": 0.002,
+    "max_profit_margin_pct": 0.1,
+    "reinvestment_pct": 0.3,
     "daily_loss_limit_pct": 0.05,
     "max_exposure_pct": 0.3
   },
   "strategy": {
     "name": "basic_rsi_macd",
     "risk_percent": 0.01,
-    "stop_loss_pct": 0.01,
-    "take_profit_pct": 0.02,
+    "stop_loss_pct": 0.003,
+    "take_profit_pct": 0.006,
     "indicators": {
-      "rsi": { "window": 14, "lower": 30, "upper": 70 },
+      "rsi": { "window": 14, "lower": 35, "upper": 65 },
       "macd": { "fast": 12, "slow": 26, "signal": 9 }
     }
   },
