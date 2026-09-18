@@ -107,7 +107,7 @@ def test_rejected_proposal_has_no_id(env):
     assert r["riskCheck"]["ok"] is False
     assert r["proposalId"] is None
     assert any("mínimo" in v for v in r["riskCheck"]["violations"])
-    assert any("CopyTrader" in w for w in r["riskCheck"]["warnings"])
+    assert any("mirrors" in w for w in r["riskCheck"]["warnings"])
 
 
 def test_execute_blocks_on_slippage(env):
