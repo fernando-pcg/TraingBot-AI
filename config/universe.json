@@ -1,0 +1,6 @@
+{
+  "_comment": "Universo permitido: solo activos líquidos, sin apalancamiento. Símbolos tal como aparecen en eToro (symbolFull). Añade o quita con criterio; nada fuera de esta lista pasa el chequeo de riesgo.",
+  "etfs": ["SPY", "VOO", "IVV", "QQQ", "IWM", "DIA", "VTI", "TLT", "GLD"],
+  "large_caps": ["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL", "META", "BRK.B", "JPM", "V", "JNJ", "XOM", "COST"],
+  "crypto": ["BTC", "ETH"]
+}

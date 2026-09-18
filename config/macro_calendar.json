@@ -1,0 +1,10 @@
+{
+  "_comment": "Eventos macro en los que NO se abren operaciones (ventana definida en risk.json). Horas en UTC. Verifica y actualiza cada mes: FOMC en federalreserve.gov, CPI en bls.gov. Los earnings se pasan por operación en propose_trade(event_dates=[...]).",
+  "events": [
+    { "name": "FOMC decisión de tipos", "datetime_utc": "2026-09-16T18:00:00Z", "source": "federalreserve.gov (verificar)" },
+    { "name": "FOMC decisión de tipos", "datetime_utc": "2026-10-28T18:00:00Z", "source": "federalreserve.gov (verificar)" },
+    { "name": "FOMC decisión de tipos", "datetime_utc": "2026-12-09T19:00:00Z", "source": "federalreserve.gov (verificar)" },
+    { "name": "CPI EE.UU. (septiembre)", "datetime_utc": "2026-10-14T12:30:00Z", "source": "bls.gov (VERIFICAR fecha exacta)" },
+    { "name": "CPI EE.UU. (octubre)", "datetime_utc": "2026-11-12T13:30:00Z", "source": "bls.gov (VERIFICAR fecha exacta)" }
+  ]
+}

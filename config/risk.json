@@ -1,0 +1,23 @@
+{
+  "_comment": "Reglas de riesgo para una cuenta de ~200 USD. El MCP las aplica ANTES de aceptar cualquier propuesta. Edita con cuidado; los tests en tests/test_risk.py documentan el comportamiento.",
+  "capital_usd": 200,
+  "max_risk_per_trade_pct": 2.0,
+  "hard_max_risk_per_trade_pct": 3.0,
+  "daily_loss_cap_pct": 3.0,
+  "weekly_loss_cap_pct": 5.0,
+  "max_open_positions": 5,
+  "max_position_pct_of_capital": 40.0,
+  "min_position_usd": 10.0,
+  "max_leverage": 1,
+  "min_reward_to_risk": 1.5,
+  "min_stop_distance_pct": 0.3,
+  "max_stop_distance_pct": 10.0,
+  "max_trades_per_day": 2,
+  "event_blackout_hours_before": 2,
+  "event_blackout_hours_after": 1,
+  "asset_event_blackout_hours_before": 24,
+  "proposal_ttl_minutes": 30,
+  "max_entry_slippage_pct": 0.5,
+  "trading_paused": false,
+  "trading_paused_reason": ""
+}
