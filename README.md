@@ -44,22 +44,20 @@ set -a; source .env; set +a      # o exporta las variables en tu shell profile
 
 El servidor debe correr donde estén las keys: tu máquina. Claude Code en la nube no llega a `public-api.etoro.com` (egress bloqueado) y sus contenedores son efímeros, así que allí solo se edita código.
 
-**Opción A, sin entorno virtual (la más simple):** instala en el mismo `python` que usa Claude Code al lanzar `python -m etoro_mcp`.
+Se necesita Python 3.11 o superior. El Python que trae macOS (3.9) no sirve, así que la vía recomendada es **uv**, que descarga el Python correcto y crea el entorno solo:
 
 ```bash
-python -m pip install -e ".[dev]"
-python -m pytest -q               # 46 tests deben pasar
-python -m etoro_mcp               # debe imprimir "etoro-mcp 0.1.0 · modo=demo"; Ctrl+C para salir
+# instalar uv (macOS/Linux)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+# Windows (PowerShell): powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+cd TraingBot-AI
+uv sync --extra dev                 # crea .venv con Python 3.11+ e instala dependencias
+uv run python -m pytest -q          # 46 passed
+uv run python -m etoro_mcp          # debe imprimir "etoro-mcp 0.1.0 · modo=..."; Ctrl+C para salir
 ```
 
-**Opción B, con entorno virtual:** crea `.venv`, instala dentro, y registra el servidor con la ruta completa a ese Python (ver `claude mcp add` más abajo), porque `.mcp.json` invoca `python` a secas y si ese no tiene `mcp` instalado el servidor no arranca (`ModuleNotFoundError: No module named 'mcp'`).
-
-```bash
-python -m venv .venv
-# Linux/macOS: source .venv/bin/activate     Windows: .venv\Scripts\activate
-pip install -e ".[dev]"
-python -m pytest -q
-```
+`.mcp.json` ya lanza el servidor con `uv run`, así que Claude Code usará ese mismo entorno sin configurar nada más. Si prefieres no usar uv, instala Python 3.11+ (por ejemplo `brew install python@3.12`) y cambia `command`/`args` de `.mcp.json` a ese intérprete con `-m etoro_mcp`.
 
 ## 1b. Qué key es cada variable
 
@@ -81,7 +79,7 @@ Comprueba con `/mcp` que aparece `etoro` con 19 herramientas y pide: "sesión de
 Si prefieres el servidor a nivel de usuario (fuera del repo):
 
 ```bash
-claude mcp add etoro -s user -e ETORO_MODE=demo -e ETORO_API_KEY=... -e ETORO_USER_KEY=... -- python -m etoro_mcp
+claude mcp add etoro -s user -e ETORO_MODE=demo -e ETORO_API_KEY=... -e ETORO_USER_KEY=... -- uv run --project /ruta/al/repo python -m etoro_mcp
 ```
 
 ### Claude Desktop
@@ -92,8 +90,8 @@ En `claude_desktop_config.json`:
 {
   "mcpServers": {
     "etoro": {
-      "command": "/ruta/al/repo/.venv/bin/python",
-      "args": ["-m", "etoro_mcp"],
+      "command": "uv",
+      "args": ["run", "--project", "/ruta/al/repo", "python", "-m", "etoro_mcp"],
       "env": { "ETORO_MODE": "demo", "ETORO_API_KEY": "…", "ETORO_USER_KEY": "…", "ETORO_MCP_HOME": "/ruta/al/repo" }
     }
   }

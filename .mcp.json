@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "etoro": {
-      "command": "python",
-      "args": ["-m", "etoro_mcp"],
+      "command": "uv",
+      "args": ["run", "--quiet", "--project", ".", "python", "-m", "etoro_mcp"],
       "env": {
         "ETORO_MODE": "${ETORO_MODE:-demo}",
         "ETORO_API_KEY": "${ETORO_API_KEY}",
