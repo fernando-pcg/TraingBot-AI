@@ -40,14 +40,37 @@ cp .env.example .env
 set -a; source .env; set +a      # o exporta las variables en tu shell profile
 ```
 
-## 2. Instalación
+## 2. Instalación (en tu PC)
+
+El servidor debe correr donde estén las keys: tu máquina. Claude Code en la nube no llega a `public-api.etoro.com` (egress bloqueado) y sus contenedores son efímeros, así que allí solo se edita código.
+
+**Opción A, sin entorno virtual (la más simple):** instala en el mismo `python` que usa Claude Code al lanzar `python -m etoro_mcp`.
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
+python -m pip install -e ".[dev]"
 python -m pytest -q               # 46 tests deben pasar
-python -m etoro_mcp               # arranca el servidor stdio (Ctrl+C para salir)
+python -m etoro_mcp               # debe imprimir "etoro-mcp 0.1.0 · modo=demo"; Ctrl+C para salir
 ```
+
+**Opción B, con entorno virtual:** crea `.venv`, instala dentro, y registra el servidor con la ruta completa a ese Python (ver `claude mcp add` más abajo), porque `.mcp.json` invoca `python` a secas y si ese no tiene `mcp` instalado el servidor no arranca (`ModuleNotFoundError: No module named 'mcp'`).
+
+```bash
+python -m venv .venv
+# Linux/macOS: source .venv/bin/activate     Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+python -m pytest -q
+```
+
+## 1b. Qué key es cada variable
+
+eToro entrega dos valores por key. Se mapean así:
+
+| eToro | Header | Variable |
+|---|---|---|
+| Key pública (API key) | `x-api-key` | `ETORO_API_KEY` |
+| Key privada (User key) | `x-user-key` | `ETORO_USER_KEY` |
+
+No las pegues en el chat de Claude: van en `.env` o en el entorno del sistema. Si una key se filtró, revócala en el portal y crea otra.
 
 ## 3. Conectar en Claude Code
 
