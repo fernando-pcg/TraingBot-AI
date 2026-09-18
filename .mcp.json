@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "etoro": {
+      "command": "python",
+      "args": ["-m", "etoro_mcp"],
+      "env": {
+        "ETORO_MODE": "${ETORO_MODE:-demo}",
+        "ETORO_API_KEY": "${ETORO_API_KEY}",
+        "ETORO_USER_KEY": "${ETORO_USER_KEY}",
+        "ETORO_ALLOW_REAL_TRADING": "${ETORO_ALLOW_REAL_TRADING:-false}"
+      }
+    }
+  }
+}
